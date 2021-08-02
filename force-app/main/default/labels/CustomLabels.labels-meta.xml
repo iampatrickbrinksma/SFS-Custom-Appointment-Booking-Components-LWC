@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>No_Slots_Available</fullName>
+        <categories>Field Service - Self Service</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>No Slots Available</shortDescription>
+        <value>No slots available</value>
+    </labels>
+    <labels>
+        <fullName>Slots_Are_In_Timezone</fullName>
+        <categories>Field Service - Self Service</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Slots Are In Timezone</shortDescription>
+        <value>The time slots are displayed in time zone:</value>
+    </labels>
+</CustomLabels>

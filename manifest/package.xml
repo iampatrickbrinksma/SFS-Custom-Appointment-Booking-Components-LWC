@@ -1,36 +1,29 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>*</members>
+        <members>SelfServiceBookingSlot</members>
+        <members>SelfServiceGetSlots</members>
+        <members>SelfServiceScheduleAppointment</members>
+        <members>SelfServiceUpdateServiceAppointment</members>
+        <members>SelfServiceUtil</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>*</members>
-        <name>ApexComponent</name>
+        <members>No_Slots_Available</members>
+        <members>Slots_Are_In_Timezone</members>
+        <name>CustomLabel</name>
     </types>
     <types>
-        <members>*</members>
-        <name>ApexPage</name>
+        <members>Self_Service_Appointment_Booking</members>
+        <name>Flow</name>
     </types>
     <types>
-        <members>*</members>
-        <name>ApexTestSuite</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexTrigger</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>AuraDefinitionBundle</name>
-    </types>
-    <types>
-        <members>*</members>
+        <members>selfServiceShowBookingSlots</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>
-        <members>*</members>
-        <name>StaticResource</name>
+        <members>ServiceAppointment.SelfService_Book_Apppointment</members>
+        <name>QuickAction</name>
     </types>
-    <version>49.0</version>
+    <version>52.0</version>
 </Package>

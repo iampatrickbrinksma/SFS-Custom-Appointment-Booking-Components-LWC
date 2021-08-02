@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>52.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Self Service Appointment Booking - Display Slots</masterLabel>
+    <targets>
+        <target>lightning__FlowScreen</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="slots" label="Slots" type="apex://SelfServiceBookingSlot[]" role="inputOnly"/>
+            <property name="timezoneId" label="Time Zone Id" type="String" role="inputOnly"/>
+            <property name="timezoneName" label="Time Zone Name" type="String" role="inputOnly"/>
+            <property name="error" label="Error Message" type="String" role="inputOnly"/>
+            <property name="showNumberOfDays" label="Show Number Of Days" type="Integer" role="inputOnly"/>
+            <property name="startTime" label="Start Time" type="String" role="outputOnly"/>
+            <property name="endTime" label="End Time" type="String" role="outputOnly"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

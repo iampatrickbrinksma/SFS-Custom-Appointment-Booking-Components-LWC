@@ -1,0 +1,137 @@
+<template>
+    <!-- Display when there is no error message, which is an input of the LWC -->
+    <template if:false={error}>
+        <!-- Display if there are slots available -->
+        <template if:true={timeslots.length}>
+            <!-- Display days if there are more than 1 day of slots available -->
+            <template if:true={multipleDays}>
+                <!-- Display the days for which slots are available -->
+                <!-- Position the days in the absolute center of the screen which margin around the element -->
+                <div class="slds-align_absolute-center slds-var-m-around_medium">
+                    <!-- Display previous days navigation when applicable -->
+                    <template if:true={showPrevDaysNav}>
+                        <div style="display:inline-block;width:16px;">
+                            <lightning-icon 
+                                class="mousePointerHover" 
+                                icon-name="utility:chevronleft" 
+                                size="x-small" 
+                                alternative-text="Show previous days" 
+                                title="Show previous days" 
+                                onclick={showPrevDays}>
+                            </lightning-icon>
+                        </div>
+                    </template>    
+                    <!-- Make the element scrollable and size large -->
+                    <div id="timeslotdays" data-id="timeslotdays" class="slds-scrollable">
+                        <!-- Use the horizontal list to display the days -->
+                        <ul class="slds-list_horizontal">
+                            <!-- Display each day as an <li> element -->
+                            <template for:each={timeSlotDays} for:item="timeSlotDay">
+                                <!-- Style the day as a badge -->
+                                <li class="slds-item slds-badge slds-badge_lightest slds-var-m-around_small" key={timeSlotDay.day}>
+                                    <!-- If the day is the selected day, use different styling -->
+                                    <template if:true={timeSlotDay.isSelected}>
+                                        <div 
+                                            class="timeslotday-selected slds-align_absolute-center" 
+                                            style="width: 36px;">
+                                            <div class="slds-text-align_center">
+                                                <lightning-formatted-date-time 
+                                                    value={timeSlotDay.day} 
+                                                    weekday="short">
+                                                </lightning-formatted-date-time>
+                                                <br/>
+                                                <lightning-formatted-date-time 
+                                                    value={timeSlotDay.day}
+                                                    day="2-digit">
+                                                </lightning-formatted-date-time>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <!-- If the day is the selected day, make it clickable -->
+                                    <template if:false={timeSlotDay.isSelected}>
+                                        <div
+                                            class="timeslotday slds-align_absolute-center"
+                                            style="width: 36px;"   
+                                            data-day={timeSlotDay.dayDate}
+                                            data-isselected={timeSlotDay.isSelected}
+                                            onclick={selectTimeslotDay}>
+                                            <div class="slds-text-align_center">
+                                                <lightning-formatted-date-time 
+                                                    value={timeSlotDay.day} 
+                                                    weekday="short">
+                                                </lightning-formatted-date-time>
+                                            <br/>
+                                                <lightning-formatted-date-time 
+                                                    value={timeSlotDay.day}
+                                                    day="2-digit">
+                                                </lightning-formatted-date-time>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                    <!-- Display next days navigation when applicable -->
+                    <template if:true={showNextDaysNav}>
+                        <div style="display:inline-block;width:16px;">
+                            <lightning-icon 
+                                class="mousePointerHover" 
+                                icon-name="utility:chevronright" 
+                                size="x-small" 
+                                alternative-text="Show next days" 
+                                title="Show next days" 
+                                onclick={showNextDays}>
+                            </lightning-icon>
+                        </div>
+                    </template>                        
+                </div>
+            </template>
+            <!-- Display the time slots as a grid of 2 -->
+            <div class="slds-grid slds-wrap">
+                <!-- Loop through time slots -->
+                <template for:each={displayedSlots} for:item="slot">
+                    <!-- Display date covering 2 grid columns if time slot is the first in the day -->
+                    <template if:true={slot.firstInDay}>
+                        <div class="slds-col slds-size_2-of-2" key={slot.index}>
+                            <div class="slds-var-p-top_small">
+                                <lightning-formatted-date-time value={slot.start} class="slds-text-heading_small" year="numeric" month="short" day="2-digit" weekday="long">
+                                </lightning-formatted-date-time>                             
+                            </div>
+                        </div>    
+                    </template>
+                    <!-- Use slds-no-wrap to display 2 timeslots on the same line -->
+                    <div class="slds-col slds-size_1-of-2" key={slot.index}>
+                        <div class="timeslot slds-box slds-theme_default slds-var-m-around_x-small slds-align_absolute-center" data-index={slot.index} onclick={handleSelectSlot}>
+                            <!--
+                            <lightning-icon 
+                                class="slds-var-m-right_small"
+                                variant="inverse" 
+                                icon-name="utility:date_time" 
+                                alternative-text="Timeslot" size="x-small"
+                                title="Timeslot">
+                            </lightning-icon>
+                            -->
+                            <lightning-formatted-date-time value={slot.start} hour="2-digit" minute="2-digit" time-zone={userTimezone}>
+                            </lightning-formatted-date-time>
+                            &nbsp;-&nbsp;
+                            <lightning-formatted-date-time value={slot.finish} hour="2-digit" minute="2-digit" time-zone={userTimezone}>
+                            </lightning-formatted-date-time>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <template if:true={displayTimeZone}>
+                <div class="slds-var-p-top_small slds-text-body_small slds-text-color_weak">{label.customlabelSlotsInTimeZone} {timezoneName}</div>                
+            </template>
+        </template>
+        <!-- Display if there are no available slots -->
+        <template if:false={timeslots.length}>
+            <div class="slds-text-heading_small slds-text-align_center">{label.customlabelNoSlotsAvailable}</div>
+        </template>
+    </template>
+    <!-- Display in case of error -->
+    <template if:true={error}>
+        <div class="slds-text-heading_small slds-text-align_center slds-text-color_error">{error}</div>
+    </template>
+</template>

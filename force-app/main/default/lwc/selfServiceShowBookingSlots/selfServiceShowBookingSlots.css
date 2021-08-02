@@ -1,0 +1,33 @@
+/* Selected timeslot */
+.selected {
+    background-color: var(--lwc-colorBrandDark, #0070d2);
+    color: #fff;
+}
+
+/* When user hovers over a timeslot */
+.timeslot:hover {
+    background-color: var(--lwc-colorBrandDark, #0070d2);
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Day */
+.timeslotday {
+    font-weight: var(--lwc-fontWeightRegular,400);
+}
+
+/* Day selected */
+.timeslotday-selected {
+    font-weight: var(--lwc-fontWeightRegular,400);
+    color: var(--lwc-colorBrandDark, #0070d2);
+}
+
+/* Day - hover */
+.timeslotday:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.mousePointerHover {
+    cursor: pointer;
+}
