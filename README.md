@@ -27,3 +27,19 @@ The Field Service Managed Package as part of SFS delivers a set of permission se
 This example solution has been tested with a user with a profile which is an exact clone of the standard "Customer Community User" profile and the "Field Service Self Service Permissions" permission set assigned.
 The user's profile and permission set only provide access to objects and fields. Access to the records needs to be provided either via the sharing capabilities of the platform and/or by running the Flow in the "System Context Without Sharing—Access All Data" context, which is used in this example solution.
 To expose the appointment in the Experience Site, a Sharing Set was created including both the Service Appointment and Work Order object providing Read / Write access level on records where the user is the contact person.
+
+### Flow Parameters
+
+The main component is the "Self Service Appointment Booking" screen flow which has the following input variables. Most of them have default values, which you can adjust or overwrite by providing values:
+
+Name | Type | Purpose | Default value
+--- | --- | --- | ---
+recordId | Text | Record Id of the Service Appointment. This is automatically passed in to the Flow when the Quick Action is put on the object's page layout. | 
+VAR_ExtendHorizonWithNumberOfDays | Number | Number of days with which the scheduling horizon is extended if no available time slots are found, which results in the Earliest Start Permited and Due Date of the Service Appointment to be increased with this value. | 7
+VAR_MaxAllowedHorizonExtensions | Number  | Number of allowed extensions of the scheduling horizon. If this number is exceeded, a message is displayed. | 3
+VAR_OperatingHoursName | Text | Name of the Operating Hours to use for the available time slots. As the name field is not unique, when multiple records exist, the first one is used. | Gold Appointments Calendar
+VAR_SchedulingPolicyName | Text | Scheduling Policy used to get available time slots and schedule the appointment. As the name field is not unique, when multiple records exist, the first one is used. | Customer First
+VAR_ServiceAppointmentId | Text | Record Id of the Service Appointment. This value is overwitten by the recordId variable. | 
+VAR_ShowNumberOfDays | Number | Number of days to show in the day picker in the LWC component | 7
+VAR_UseExactAppointments | Boolean | Use exact appointments when getting available time slots and scheduling the appointment | FALSE
+
