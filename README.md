@@ -43,3 +43,58 @@ VAR_ServiceAppointmentId | Text | Record Id of the Service Appointment. This val
 VAR_ShowNumberOfDays | Number | Number of days to show in the day picker in the LWC component | 7
 VAR_UseExactAppointments | Boolean | Use exact appointments when getting available time slots and scheduling the appointment | FALSE
 
+### How To Use
+
+The following screenshots show an example of how to use the screen flow in an Experience Site with an authenticated user which has the permissions as described earlier in this document. The Experience Site is a very basic setup exposing the Service Appointments on which the user is the contact person. The Service Appointment Page Layout shows the button to start the flow as shown in the screenshot below.
+
+![image](https://user-images.githubusercontent.com/78381570/127971717-d29eec58-87b5-405d-8cb6-8a2ded1f129f.png)
+
+The flow will first perform some Get Record(s) actions to retrieve data that is needed to show available time slots and schedule the appointment. If a record cannot be found, a message is shown what data could not be found. The flow retrieves the following information:
+
+* Service Appointment - including a validation if the Service Appointment has a Service Territory
+* Scheduling Policy
+* Operating Hours
+
+If all the data can be found, a screen is shown to indicate that available time slots will be retrieved and the planned duration of the appointment.
+
+![image](https://user-images.githubusercontent.com/78381570/127971808-b80f2fa8-75e7-444b-9c11-726bfe14fef3.png)
+
+In the next screen the available time slots are shown. This is a Lightning Web Component which can be tailored to the customer's specific requirements. In this example solution the days which have available time slots are shown on the top, and the user can select a day and see which time slots are available. The number of days shown at once can be configured by the Flow parameter "VAR_ShowNumberOfDays", and if more days are shown than fit in the screen, the user can scroll to the right and left. The arrows can be used to see days in the future or navigate back to earlier days.
+
+*Note: The number of days for which available time slots are retrieved are determined by the time horizon on the appointment (Earliest Start Permitted and Due Date) and the value of the "Maximum days to get candidates or to book an appointment" setting (Field Service Settings → Scheduling → General Logic).*
+
+![image](https://user-images.githubusercontent.com/78381570/127972086-8655d7fa-d74d-470c-ba94-068bf6c8a904.png)
+
+The user can select a time slot by clicking on it. When the user clicks Next, the flow will update the Service Appointment record Arrival Window Start and Arrival Window End fields with the selected times and schedule the appointment. This is performed in two separate steps to allow the schedule logic to run in its own transaction. This allows Field Service to make a callout to perform travel time calculations for SLR or P2P.
+If the user's time zone differs from that of the service territory assigned to the service appointment, a message is displayed below the time slots indicating in which time zone the slots are displayed.
+The "Extend search for available time slots" allows the user to extend the time horizon to a date in the future. How many days in the future is determined by the flow input variable "VAR_ExtendHorizonWithNumberOfDays". Furthermore, the maximum number of times the user can extend the search can be configured by setting the flow input variable "VAR_MaxAllowedHorizonExtensions".
+
+Once the appointment is scheduled a screen is shown with the confirmation of when a technician will arrive at the customer.
+
+![image](https://user-images.githubusercontent.com/78381570/127972348-b43e643b-d6b5-4f65-99c7-28dc19f3d68b.png)
+
+In the scenario where there are no available time slots, the following screen is shown allowing the user to extend the search into the future. There is also "Debug" which can be extended to allow for debugging why no time slots where found. In the example solution it only confirms if the service territory has any members, but this can be extended to additional validations.
+
+![image](https://user-images.githubusercontent.com/78381570/127972553-6c3f6e71-6c33-4181-85a4-71c44aebd208.png)
+
+If the user has extended the search more times than allowed, the following screen will be shown.
+
+![image](https://user-images.githubusercontent.com/78381570/127972598-55085ccd-98b0-4ccd-b028-84311ca769ec.png)
+
+If the user has selected a time slot and then schedules the appointment, and the time slot is not available anymore (in case appointments are scheduled concurrently), the following screen will be shown providing the user with the choice to select a different time slot. The flow will retrieve available time slots again and present them.
+
+![image](https://user-images.githubusercontent.com/78381570/127972640-61af05a0-156c-4acd-a2e0-9419ac8931d9.png)
+
+## Considerations
+
+* To be able to access the necessary data for scheduling, the flow runs in the "System Context Without Sharing—Access All Data" context. This means that any service appointment record can be accessed providing that a valid record id is passed to the flow. Take into consideration any additional validations that can be included in the flow to validate if the user can actually book the appointment.
+* When extending the search, the flow updates the Earliest Start Permitted and the Due Date of the service appointment. The flow does remember the original values, and will update them back if the user steps through the flow steps. If the user decides to exit the flow, consider that the field values are not updated to their original values.
+* Field Service makes a callout to calculate travel times when using SLR or P2P. It does that when using the on-platform scheduling actions (Book Appointment, Candidates, Emergency, Schedule on Gantt) or when using the methods which are part of the Apex Classes in the FSL Namespace (https://developer.salesforce.com/docs/atlas.en-us.field_service_dev.meta/field_service_dev/apex_namespace_FSL.htm): AppointmentBookingService, GradeSlotsService and ScheduleService. The Salesforce platform does not allow a callout when there are pending transactions (e.g. DML). This is the reason that the action to update the arrival window on the appointment and the action to schedule the appointment are separated. Salesforce Flow provides the ability to commit changes before executing an Apex Action. Both the GetSlots and Schedule Apex Actions are starting a new transaction to allow travel time calculations.
+* This example solution has not been thoroughly tested with users in different time zones. The Apex Classes do consider time zones, and convert date time values accordingly. 
+* This example solution has not been tested on a mobile device. The responsiveness of the Lightning Web Component needs to be tested and adjusted accordingly.
+* This example solution is not production-ready. For example, Apex Test classes need to be written for code coverage.
+
+
+
+
+
