@@ -2,6 +2,9 @@
 
 An example of how to allow users to book an appointment on a Salesforce Experience Site (formerly known as Communities). This example uses a combination of Flow, Apex and a Lightning Web Component to allow the user to select an available time slot and schedule the appointment.
 
+## Disclaimer
+IMPORTANT: This code is not intended to be deployed directly to a Salesforce production environment, but to be used as an example. This is not a Salesforce product and is not officially supported by Salesforce.
+
 ## How To Use
 
 The Flow "Self Service Appointment Booking" can be exposed in an Experience Site by adding the Quick Action "Book Appointment (Self Service)" to the page layout assigned to the experience site user. The flow will guide the user through the process after performing some data validations to make sure the user has access to the right data. The scheduling policy and operating hours that are used to get available time slots and schedule the appointment can be provided to the flow as input parameters. The result of the flow is a scheduled appointment with the arrival window as the selected time slots.
